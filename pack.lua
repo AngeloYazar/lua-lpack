@@ -67,8 +67,11 @@ function doendian(c)
 end
 
 function doswap(swap, a, T)
+ if T == "byte" or T == "char" then
+  return a
+ end
  if swap then
-  if T == "double" or T == "float" then
+ -- if T == "double" or T == "float" then
     -- this part makes me unhappy --
     a = ffi.new(T.."[1]",a)
     local m = ffi.sizeof(T)
@@ -76,9 +79,9 @@ function doswap(swap, a, T)
     str = str:reverse()
     ffi.copy(a, str, m)
     return tonumber( a[0] )
-  else
-    return bit.bswap( a )
-  end
+  --else
+  --  return bit.bswap( a )
+  --end
  end
  return a
 end
@@ -134,10 +137,10 @@ function l_unpack(s,f,init)
 
   function unpackNumber(T)
     return function()   
-      local m = ffi.sizeof(T)   
+      local m = ffi.sizeof(T)  
       if i + m - 1 > len then return done end
       local a = ffi.new(T.."[1]")
-      ffi.copy(a, s:sub(i), m)
+      ffi.copy(a, s:sub(i,i+m), m)
       push( doswap(swap, tonumber(a[0]), T) )
       i = i + m 
     end   
