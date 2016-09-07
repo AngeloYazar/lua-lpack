@@ -87,7 +87,7 @@ function doswap(swap, a, T)
 end
 
 function isdigit(c)
-  return C.isdigit( string.byte(c) ) == 1
+  return C.isdigit( string.byte(c) ) ~= 0
 end
 
 function l_unpack(s,f,init)
